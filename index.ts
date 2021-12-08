@@ -1,5 +1,17 @@
-import { cron } from "https://deno.land/x/deno_cron@v1.0.0/cron.ts";
+import { serve } from "https://deno.land/std@0.114.0/http/server.ts";
 
-cron('0 * * * * *', () => {
-  console.log(new Date())
-})
+console.log("Listening on http://localhost:8000");
+serve(async (_req) => {
+  await fetch(Deno.env('DISCORD_WEBHOOK_POE'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      content: 'hello'
+    })
+  })
+  return new Response("ok", {
+    headers: { "content-type": "text/plain" },
+  });
+});
